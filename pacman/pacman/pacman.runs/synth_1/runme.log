@@ -1,0 +1,322 @@
+
+*** Running vivado
+    with args -log pong.vds -m64 -product Vivado -mode batch -messageDb vivado.pb -notrace -source pong.tcl
+
+
+
+****** Vivado v2025.1 (64-bit)
+  **** SW Build 6140274 on Thu May 22 00:12:29 MDT 2025
+  **** IP Build 6138677 on Thu May 22 03:10:11 MDT 2025
+  **** SharedData Build 6139179 on Tue May 20 17:58:58 MDT 2025
+  **** Start of session at: Thu Dec  4 13:40:37 2025
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source pong.tcl -notrace
+create_project: Time (s): cpu = 00:00:19 ; elapsed = 00:00:20 . Memory (MB): peak = 497.301 ; gain = 216.242
+Command: read_checkpoint -auto_incremental -incremental C:/Users/airbe/Downloads/CPE-487/pacman/pacman.srcs/utils_1/imports/synth_1/pong.dcp
+INFO: [Vivado 12-5825] Read reference checkpoint from C:/Users/airbe/Downloads/CPE-487/pacman/pacman.srcs/utils_1/imports/synth_1/pong.dcp for incremental synthesis
+INFO: [Vivado 12-7989] Please ensure there are no constraint changes
+Command: synth_design -top pong -part xc7a100tcsg324-1
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7a100t'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7a100t'
+INFO: [Device 21-403] Loading part xc7a100tcsg324-1
+INFO: [Designutils 20-5440] No compile time benefit to using incremental synthesis; A full resynthesis will be run
+INFO: [Designutils 20-4379] Flow is switching to default flow due to incremental criteria not met. If you would like to alter this behaviour and have the flow terminate instead, please set the following parameter config_implementation {autoIncr.Synth.RejectBehavior Terminate}
+INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 2 processes.
+INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
+INFO: [Synth 8-7075] Helper process launched with PID 24784
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:00:05 ; elapsed = 00:00:05 . Memory (MB): peak = 1200.867 ; gain = 495.441
+---------------------------------------------------------------------------------
+WARNING: [Synth 8-9112] actual for formal port 'red_in' is neither a static name nor a globally static expression [C:/Users/airbe/Downloads/sources/pong.vhd:102]
+WARNING: [Synth 8-9112] actual for formal port 'green_in' is neither a static name nor a globally static expression [C:/Users/airbe/Downloads/sources/pong.vhd:103]
+WARNING: [Synth 8-9112] actual for formal port 'blue_in' is neither a static name nor a globally static expression [C:/Users/airbe/Downloads/sources/pong.vhd:104]
+INFO: [Synth 8-638] synthesizing module 'pong' [C:/Users/airbe/Downloads/sources/pong.vhd:22]
+WARNING: [Synth 8-5640] Port 'pac_x' is missing in component declaration [C:/Users/airbe/Downloads/sources/pong.vhd:32]
+WARNING: [Synth 8-5640] Port 'pac_y' is missing in component declaration [C:/Users/airbe/Downloads/sources/pong.vhd:32]
+WARNING: [Synth 8-5640] Port 'pac_dir' is missing in component declaration [C:/Users/airbe/Downloads/sources/pong.vhd:32]
+INFO: [Synth 8-3491] module 'bat_n_ball' declared at 'C:/Users/airbe/Downloads/sources/bat_n_ball.vhd:6' bound to instance 'add_bb' of component 'bat_n_ball' [C:/Users/airbe/Downloads/sources/pong.vhd:87]
+INFO: [Synth 8-638] synthesizing module 'bat_n_ball' [C:/Users/airbe/Downloads/sources/bat_n_ball.vhd:22]
+WARNING: [Synth 8-614] signal 'game_on' is read in the process but is not in the sensitivity list [C:/Users/airbe/Downloads/sources/bat_n_ball.vhd:51]
+INFO: [Synth 8-256] done synthesizing module 'bat_n_ball' (0#1) [C:/Users/airbe/Downloads/sources/bat_n_ball.vhd:22]
+INFO: [Synth 8-3491] module 'vga_sync' declared at 'C:/Users/airbe/Downloads/sources/vga_sync.vhd:5' bound to instance 'vga_driver' of component 'vga_sync' [C:/Users/airbe/Downloads/sources/pong.vhd:99]
+INFO: [Synth 8-638] synthesizing module 'vga_sync' [C:/Users/airbe/Downloads/sources/vga_sync.vhd:21]
+INFO: [Synth 8-256] done synthesizing module 'vga_sync' (0#1) [C:/Users/airbe/Downloads/sources/vga_sync.vhd:21]
+INFO: [Synth 8-3491] module 'clk_wiz_0' declared at 'C:/Users/airbe/Downloads/sources/clk_wiz_0.vhd:74' bound to instance 'clk_wiz_0_inst' of component 'clk_wiz_0' [C:/Users/airbe/Downloads/sources/pong.vhd:115]
+INFO: [Synth 8-638] synthesizing module 'clk_wiz_0' [C:/Users/airbe/Downloads/sources/clk_wiz_0.vhd:83]
+INFO: [Synth 8-3491] module 'clk_wiz_0_clk_wiz' declared at 'C:/Users/airbe/Downloads/sources/clk_wiz_0_clk_wiz.vhd:63' bound to instance 'U0' of component 'clk_wiz_0_clk_wiz' [C:/Users/airbe/Downloads/sources/clk_wiz_0.vhd:98]
+INFO: [Synth 8-638] synthesizing module 'clk_wiz_0_clk_wiz' [C:/Users/airbe/Downloads/sources/clk_wiz_0_clk_wiz.vhd:72]
+	Parameter BANDWIDTH bound to: OPTIMIZED - type: string 
+	Parameter CLKFBOUT_MULT_F bound to: 10.125000 - type: double 
+	Parameter CLKFBOUT_PHASE bound to: 0.000000 - type: double 
+	Parameter CLKFBOUT_USE_FINE_PS bound to: 0 - type: bool 
+	Parameter CLKIN1_PERIOD bound to: 10.000000 - type: double 
+	Parameter CLKOUT0_DIVIDE_F bound to: 25.250000 - type: double 
+	Parameter CLKOUT0_DUTY_CYCLE bound to: 0.500000 - type: double 
+	Parameter CLKOUT0_PHASE bound to: 0.000000 - type: double 
+	Parameter CLKOUT0_USE_FINE_PS bound to: 0 - type: bool 
+	Parameter CLKOUT4_CASCADE bound to: 0 - type: bool 
+	Parameter COMPENSATION bound to: ZHOLD - type: string 
+	Parameter DIVCLK_DIVIDE bound to: 1 - type: integer 
+	Parameter REF_JITTER1 bound to: 0.010000 - type: double 
+	Parameter STARTUP_WAIT bound to: 0 - type: bool 
+INFO: [Synth 8-113] binding component instance 'mmcm_adv_inst' to cell 'MMCME2_ADV' [C:/Users/airbe/Downloads/sources/clk_wiz_0_clk_wiz.vhd:114]
+INFO: [Synth 8-113] binding component instance 'clkf_buf' to cell 'BUFG' [C:/Users/airbe/Downloads/sources/clk_wiz_0_clk_wiz.vhd:176]
+INFO: [Synth 8-113] binding component instance 'clkout1_buf' to cell 'BUFG' [C:/Users/airbe/Downloads/sources/clk_wiz_0_clk_wiz.vhd:183]
+INFO: [Synth 8-256] done synthesizing module 'clk_wiz_0_clk_wiz' (0#1) [C:/Users/airbe/Downloads/sources/clk_wiz_0_clk_wiz.vhd:72]
+INFO: [Synth 8-256] done synthesizing module 'clk_wiz_0' (0#1) [C:/Users/airbe/Downloads/sources/clk_wiz_0.vhd:83]
+INFO: [Synth 8-3491] module 'leddec16' declared at 'C:/Users/airbe/Downloads/sources/leddec16.vhd:4' bound to instance 'led1' of component 'leddec16' [C:/Users/airbe/Downloads/sources/pong.vhd:120]
+INFO: [Synth 8-638] synthesizing module 'leddec16' [C:/Users/airbe/Downloads/sources/leddec16.vhd:12]
+INFO: [Synth 8-256] done synthesizing module 'leddec16' (0#1) [C:/Users/airbe/Downloads/sources/leddec16.vhd:12]
+INFO: [Synth 8-256] done synthesizing module 'pong' (0#1) [C:/Users/airbe/Downloads/sources/pong.vhd:22]
+WARNING: [Synth 8-3848] Net display in module/entity pong does not have driver. [C:/Users/airbe/Downloads/sources/pong.vhd:30]
+WARNING: [Synth 8-7129] Port v_sync in module bat_n_ball is either unconnected or has no load
+WARNING: [Synth 8-7129] Port pac_x[10] in module bat_n_ball is either unconnected or has no load
+WARNING: [Synth 8-7129] Port pac_x[9] in module bat_n_ball is either unconnected or has no load
+WARNING: [Synth 8-7129] Port pac_x[8] in module bat_n_ball is either unconnected or has no load
+WARNING: [Synth 8-7129] Port pac_x[7] in module bat_n_ball is either unconnected or has no load
+WARNING: [Synth 8-7129] Port pac_x[6] in module bat_n_ball is either unconnected or has no load
+WARNING: [Synth 8-7129] Port pac_x[5] in module bat_n_ball is either unconnected or has no load
+WARNING: [Synth 8-7129] Port pac_x[4] in module bat_n_ball is either unconnected or has no load
+WARNING: [Synth 8-7129] Port pac_x[3] in module bat_n_ball is either unconnected or has no load
+WARNING: [Synth 8-7129] Port pac_x[2] in module bat_n_ball is either unconnected or has no load
+WARNING: [Synth 8-7129] Port pac_x[1] in module bat_n_ball is either unconnected or has no load
+WARNING: [Synth 8-7129] Port pac_x[0] in module bat_n_ball is either unconnected or has no load
+WARNING: [Synth 8-7129] Port pac_y[10] in module bat_n_ball is either unconnected or has no load
+WARNING: [Synth 8-7129] Port pac_y[9] in module bat_n_ball is either unconnected or has no load
+WARNING: [Synth 8-7129] Port pac_y[8] in module bat_n_ball is either unconnected or has no load
+WARNING: [Synth 8-7129] Port pac_y[7] in module bat_n_ball is either unconnected or has no load
+WARNING: [Synth 8-7129] Port pac_y[6] in module bat_n_ball is either unconnected or has no load
+WARNING: [Synth 8-7129] Port pac_y[5] in module bat_n_ball is either unconnected or has no load
+WARNING: [Synth 8-7129] Port pac_y[4] in module bat_n_ball is either unconnected or has no load
+WARNING: [Synth 8-7129] Port pac_y[3] in module bat_n_ball is either unconnected or has no load
+WARNING: [Synth 8-7129] Port pac_y[2] in module bat_n_ball is either unconnected or has no load
+WARNING: [Synth 8-7129] Port pac_y[1] in module bat_n_ball is either unconnected or has no load
+WARNING: [Synth 8-7129] Port pac_y[0] in module bat_n_ball is either unconnected or has no load
+WARNING: [Synth 8-7129] Port pac_dir[1] in module bat_n_ball is either unconnected or has no load
+WARNING: [Synth 8-7129] Port pac_dir[0] in module bat_n_ball is either unconnected or has no load
+WARNING: [Synth 8-7129] Port bat_x[10] in module bat_n_ball is either unconnected or has no load
+WARNING: [Synth 8-7129] Port bat_x[9] in module bat_n_ball is either unconnected or has no load
+WARNING: [Synth 8-7129] Port bat_x[8] in module bat_n_ball is either unconnected or has no load
+WARNING: [Synth 8-7129] Port bat_x[7] in module bat_n_ball is either unconnected or has no load
+WARNING: [Synth 8-7129] Port bat_x[6] in module bat_n_ball is either unconnected or has no load
+WARNING: [Synth 8-7129] Port bat_x[5] in module bat_n_ball is either unconnected or has no load
+WARNING: [Synth 8-7129] Port bat_x[4] in module bat_n_ball is either unconnected or has no load
+WARNING: [Synth 8-7129] Port bat_x[3] in module bat_n_ball is either unconnected or has no load
+WARNING: [Synth 8-7129] Port bat_x[2] in module bat_n_ball is either unconnected or has no load
+WARNING: [Synth 8-7129] Port bat_x[1] in module bat_n_ball is either unconnected or has no load
+WARNING: [Synth 8-7129] Port bat_x[0] in module bat_n_ball is either unconnected or has no load
+WARNING: [Synth 8-7129] Port serve in module bat_n_ball is either unconnected or has no load
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:00:07 ; elapsed = 00:00:07 . Memory (MB): peak = 1309.395 ; gain = 603.969
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:07 ; elapsed = 00:00:07 . Memory (MB): peak = 1309.395 ; gain = 603.969
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:07 ; elapsed = 00:00:07 . Memory (MB): peak = 1309.395 ; gain = 603.969
+---------------------------------------------------------------------------------
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.003 . Memory (MB): peak = 1309.395 ; gain = 0.000
+INFO: [Netlist 29-17] Analyzing 1 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-570] Preparing netlist for logic optimization
+
+Processing XDC Constraints
+Initializing timing engine
+Parsing XDC File [C:/Users/airbe/Downloads/sources/pong.xdc]
+Finished Parsing XDC File [C:/Users/airbe/Downloads/sources/pong.xdc]
+INFO: [Project 1-236] Implementation specific constraints were found while reading constraint file [C:/Users/airbe/Downloads/sources/pong.xdc]. These constraints will be ignored for synthesis but will be used in implementation. Impacted constraints are listed in the file [.Xil/pong_propImpl.xdc].
+Resolution: To avoid this warning, move constraints listed in [.Xil/pong_propImpl.xdc] to another XDC file and exclude this new file from synthesis with the used_in_synthesis property (File Properties dialog in GUI) and re-run elaboration/synthesis.
+INFO: [Timing 38-2] Deriving generated clocks
+Completed Processing XDC Constraints
+
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1362.836 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.005 . Memory (MB): peak = 1362.836 ; gain = 0.000
+INFO: [Designutils 20-5440] No compile time benefit to using incremental synthesis; A full resynthesis will be run
+INFO: [Designutils 20-4379] Flow is switching to default flow due to incremental criteria not met. If you would like to alter this behaviour and have the flow terminate instead, please set the following parameter config_implementation {autoIncr.Synth.RejectBehavior Terminate}
+---------------------------------------------------------------------------------
+Finished Constraint Validation : Time (s): cpu = 00:00:15 ; elapsed = 00:00:15 . Memory (MB): peak = 1362.836 ; gain = 657.410
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Loading Part and Timing Information
+---------------------------------------------------------------------------------
+Loading part: xc7a100tcsg324-1
+---------------------------------------------------------------------------------
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:15 ; elapsed = 00:00:16 . Memory (MB): peak = 1362.836 ; gain = 657.410
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying 'set_property' XDC Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:15 ; elapsed = 00:00:16 . Memory (MB): peak = 1362.836 ; gain = 657.410
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:15 ; elapsed = 00:00:16 . Memory (MB): peak = 1362.836 ; gain = 657.410
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start RTL Component Statistics 
+---------------------------------------------------------------------------------
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input   11 Bit       Adders := 3     
++---Registers : 
+	               11 Bit    Registers := 5     
+	                4 Bit    Registers := 3     
+	                1 Bit    Registers := 2     
++---Muxes : 
+	   2 Input    8 Bit        Muxes := 1     
+	   4 Input    8 Bit        Muxes := 1     
+	   2 Input    5 Bit        Muxes := 1     
+	   2 Input    4 Bit        Muxes := 4     
+	   4 Input    4 Bit        Muxes := 1     
+	   2 Input    1 Bit        Muxes := 1     
+---------------------------------------------------------------------------------
+Finished RTL Component Statistics 
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Part Resource Summary
+---------------------------------------------------------------------------------
+Part Resources:
+DSPs: 240 (col length:80)
+BRAMs: 270 (col length: RAMB18 80 RAMB36 40)
+---------------------------------------------------------------------------------
+Finished Part Resource Summary
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Cross Boundary and Area Optimization
+---------------------------------------------------------------------------------
+WARNING: [Synth 8-7080] Parallel synthesis criteria is not met
+WARNING: [Synth 8-3917] design pong has port SEG7_anode[7] driven by constant 1
+WARNING: [Synth 8-3917] design pong has port SEG7_anode[6] driven by constant 1
+WARNING: [Synth 8-3917] design pong has port SEG7_anode[5] driven by constant 1
+WARNING: [Synth 8-3917] design pong has port SEG7_anode[4] driven by constant 1
+WARNING: [Synth 8-7129] Port btn0 in module pong is either unconnected or has no load
+---------------------------------------------------------------------------------
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:17 ; elapsed = 00:00:18 . Memory (MB): peak = 1372.297 ; gain = 666.871
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying XDC Timing Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:23 ; elapsed = 00:00:24 . Memory (MB): peak = 1518.812 ; gain = 813.387
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Timing Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Timing Optimization : Time (s): cpu = 00:00:23 ; elapsed = 00:00:25 . Memory (MB): peak = 1528.660 ; gain = 823.234
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Technology Mapping
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Technology Mapping : Time (s): cpu = 00:00:23 ; elapsed = 00:00:25 . Memory (MB): peak = 1538.719 ; gain = 833.293
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished IO Insertion : Time (s): cpu = 00:00:27 ; elapsed = 00:00:29 . Memory (MB): peak = 1763.473 ; gain = 1058.047
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Instances
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:27 ; elapsed = 00:00:29 . Memory (MB): peak = 1763.473 ; gain = 1058.047
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Rebuilding User Hierarchy
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:27 ; elapsed = 00:00:29 . Memory (MB): peak = 1763.473 ; gain = 1058.047
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Ports
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:27 ; elapsed = 00:00:29 . Memory (MB): peak = 1763.473 ; gain = 1058.047
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:27 ; elapsed = 00:00:29 . Memory (MB): peak = 1763.473 ; gain = 1058.047
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Nets
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:27 ; elapsed = 00:00:29 . Memory (MB): peak = 1763.473 ; gain = 1058.047
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Writing Synthesis Report
+---------------------------------------------------------------------------------
+
+Report BlackBoxes: 
++-+--------------+----------+
+| |BlackBox name |Instances |
++-+--------------+----------+
++-+--------------+----------+
+
+Report Cell Usage: 
++------+-----------+------+
+|      |Cell       |Count |
++------+-----------+------+
+|1     |BUFG       |     3|
+|2     |CARRY4     |     5|
+|3     |LUT1       |     3|
+|4     |LUT2       |    11|
+|5     |LUT3       |    15|
+|6     |LUT4       |    11|
+|7     |LUT5       |    13|
+|8     |LUT6       |    43|
+|9     |MMCME2_ADV |     1|
+|10    |FDRE       |    68|
+|11    |IBUF       |     1|
+|12    |OBUF       |    29|
++------+-----------+------+
+---------------------------------------------------------------------------------
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:27 ; elapsed = 00:00:29 . Memory (MB): peak = 1763.473 ; gain = 1058.047
+---------------------------------------------------------------------------------
+Synthesis finished with 0 errors, 0 critical warnings and 6 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:18 ; elapsed = 00:00:27 . Memory (MB): peak = 1763.473 ; gain = 1004.605
+Synthesis Optimization Complete : Time (s): cpu = 00:00:27 ; elapsed = 00:00:29 . Memory (MB): peak = 1763.473 ; gain = 1058.047
+INFO: [Project 1-571] Translating synthesized netlist
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 1763.473 ; gain = 0.000
+INFO: [Netlist 29-17] Analyzing 6 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1773.648 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+Synth Design complete | Checksum: b3fc80a7
+INFO: [Common 17-83] Releasing license: Synthesis
+44 Infos, 51 Warnings, 0 Critical Warnings and 0 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:00:33 ; elapsed = 00:00:43 . Memory (MB): peak = 1773.648 ; gain = 1270.148
+Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 1773.648 ; gain = 0.000
+INFO: [Common 17-1381] The checkpoint 'C:/Users/airbe/Downloads/CPE-487/pacman/pacman.runs/synth_1/pong.dcp' has been generated.
+INFO: [Vivado 12-24828] Executing command : report_utilization -file pong_utilization_synth.rpt -pb pong_utilization_synth.pb
+INFO: [Common 17-206] Exiting Vivado at Thu Dec  4 13:41:49 2025...

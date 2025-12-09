@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenRun Id="impl_1" LaunchPart="xc7a100tcsg324-1" LaunchTime="1764873718">
+  <File Type="REPORTS-TCL" Name="pong_reports.tcl"/>
+  <File Type="ROUTE-PWR-SUM" Name="pong_power_summary_routed.pb"/>
+  <File Type="BITSTR-MMI" Name="pong.mmi"/>
+  <File Type="OPT-DRC" Name="pong_drc_opted.rpt"/>
+  <File Type="BG-DRC" Name="pong.drc"/>
+  <File Type="ROUTE-STATUS-PB" Name="pong_route_status.pb"/>
+  <File Type="BG-BGN" Name="pong.bgn"/>
+  <File Type="PLACE-UTIL" Name="pong_utilization_placed.rpt"/>
+  <File Type="PLACE-UTIL-PB" Name="pong_utilization_placed.pb"/>
+  <File Type="PLACE-IO" Name="pong_io_placed.rpt"/>
+  <File Type="BG-BIN" Name="pong.bin"/>
+  <File Type="PLACE-CTRL" Name="pong_control_sets_placed.rpt"/>
+  <File Type="ROUTE-PWR-RPX" Name="pong_power_routed.rpx"/>
+  <File Type="BITSTR-MSK" Name="pong.msk"/>
+  <File Type="BITSTR-RBT" Name="pong.rbt"/>
+  <File Type="ROUTE-TIMINGSUMMARY" Name="pong_timing_summary_routed.rpt"/>
+  <File Type="ROUTE-TIMING-RPX" Name="pong_timing_summary_routed.rpx"/>
+  <File Type="ROUTE-STATUS" Name="pong_route_status.rpt"/>
+  <File Type="PA-TCL" Name="pong.tcl"/>
+  <File Type="ROUTE-PWR" Name="pong_power_routed.rpt"/>
+  <File Type="ROUTE-DRC" Name="pong_drc_routed.rpt"/>
+  <File Type="ROUTE-DRC-RPX" Name="pong_drc_routed.rpx"/>
+  <File Type="ROUTE-DRC-PB" Name="pong_drc_routed.pb"/>
+  <File Type="BITSTR-SYSDEF" Name="pong.sysdef"/>
+  <File Type="ROUTE-METHODOLOGY-DRC" Name="pong_methodology_drc_routed.rpt"/>
+  <File Type="ROUTE-METHODOLOGY-DRC-RPX" Name="pong_methodology_drc_routed.rpx"/>
+  <File Type="BITSTR-LTX" Name="debug_nets.ltx"/>
+  <File Type="BITSTR-LTX" Name="pong.ltx"/>
+  <File Type="ROUTE-METHODOLOGY-DRC-PB" Name="pong_methodology_drc_routed.pb"/>
+  <File Type="ROUTE-SIMILARITY" Name="pong_incremental_reuse_routed.rpt"/>
+  <File Type="RDI-RDI" Name="pong.vdi"/>
+  <File Type="ROUTE-CLK" Name="pong_clock_utilization_routed.rpt"/>
+  <File Type="ROUTE-BUS-SKEW" Name="pong_bus_skew_routed.rpt"/>
+  <File Type="ROUTE-BUS-SKEW-RPX" Name="pong_bus_skew_routed.rpx"/>
+  <File Type="ROUTE-BUS-SKEW-PB" Name="pong_bus_skew_routed.pb"/>
+  <File Type="POSTROUTE-PHYSOPT-TIMING" Name="pong_timing_summary_postroute_physopted.rpt"/>
+  <File Type="POSTROUTE-PHYSOPT-TIMING-RPX" Name="pong_timing_summary_postroute_physopted.rpx"/>
+  <File Type="POSTROUTE-PHYSOPT-TIMING-PB" Name="pong_timing_summary_postroute_physopted.pb"/>
+  <File Type="POSTROUTE-PHYSOPT-BUS-SKEW" Name="pong_bus_skew_postroute_physopted.rpt"/>
+  <File Type="POSTROUTE-PHYSOPT-BUS-SKEW-RPX" Name="pong_bus_skew_postroute_physopted.rpx"/>
+  <File Type="BG-BIT" Name="pong.bit"/>
+  <File Type="POSTROUTE-PHYSOPT-BUS-SKEW-PB" Name="pong_bus_skew_postroute_physopted.pb"/>
+  <File Type="BITSTR-NKY" Name="pong.nky"/>
+  <File Type="BITSTR-BMM" Name="pong_bd.bmm"/>
+  <File Type="WBT-USG" Name="usage_statistics_webtalk.html"/>
+  <File Type="OPT-HWDEF" Name="pong.hwdef"/>
+  <File Type="PLACE-PRE-SIMILARITY" Name="pong_incremental_reuse_pre_placed.rpt"/>
+  <File Type="ROUTE-DCP" Name="pong_routed.dcp"/>
+  <File Type="ROUTE-ERROR-DCP" Name="pong_routed_error.dcp"/>
+  <File Type="ROUTE-BLACKBOX-DCP" Name="pong_routed_bb.dcp"/>
+  <File Type="ROUTE-TIMING-PB" Name="pong_timing_summary_routed.pb"/>
+  <File Type="OPT-DCP" Name="pong_opt.dcp"/>
+  <File Type="PLACE-DCP" Name="pong_placed.dcp"/>
+  <File Type="PWROPT-DCP" Name="pong_pwropt.dcp"/>
+  <File Type="POSTPLACE-PWROPT-DCP" Name="pong_postplace_pwropt.dcp"/>
+  <File Type="PHYSOPT-DCP" Name="pong_physopt.dcp"/>
+  <File Type="POSTROUTE-PHYSOPT-DCP" Name="pong_postroute_physopt.dcp"/>
+  <File Type="POSTROUTE-PHYSOPT-BLACKBOX-DCP" Name="pong_postroute_physopt_bb.dcp"/>
+  <File Type="PDI-FILE" Name="pong.pdi"/>
+  <File Type="BOOT-PDI-FILE" Name="pong_boot.pdi"/>
+  <File Type="PL-PDI-FILE" Name="pong_pld.pdi"/>
+  <File Type="RCFI_FILE" Name="pong.rcfi"/>
+  <File Type="CFI_FILE" Name="pong.cfi"/>
+  <File Type="RNPI_FILE" Name="pong.rnpi"/>
+  <File Type="NPI_FILE" Name="pong.npi"/>
+  <File Type="RBD_FILE" Name="pong.rbd"/>
+  <File Type="ROUTE-RQS" Name="pong_routed.rqs"/>
+  <File Type="POSTROUTE-PHYSOPT-RQS" Name="pong_postroute_physopted.rqs"/>
+  <File Type="ROUTE-RQS-RPT" Name="route_report_qor_suggestions_0.rpt"/>
+  <File Type="POSTROUTE-PHYSOPT-RQS-RPT" Name="postroute_physopt_report_qor_suggestions_0.rpt"/>
+  <File Type="MMI-FILE" Name="pong.mmi"/>
+  <File Type="BIF-FILE" Name="pong.bif"/>
+  <File Type="BOOT-BIF-FILE" Name="pong_boot.bif"/>
+  <File Type="PL-BIF-FILE" Name="pong_pld.bif"/>
+  <File Type="LTX-FILE" Name="pong.ltx"/>
+  <File Type="BOOT-LTX-FILE" Name="pong_boot.ltx"/>
+  <File Type="PL-LTX-FILE" Name="pong_pld.ltx"/>
+  <File Type="RCDO-FILE" Name="pong.rcdo"/>
+  <File Type="MARKER-RCDO-FILE" Name="pong_markers.rcdo"/>
+  <File Type="PL-RCDO-FILE" Name="pong_pld.rcdo"/>
+  <File Type="MARKER-RNPI-FILE" Name="pong_markers.rnpi"/>
+  <File Type="BOOT_RNPI_FILE" Name="pong_boot.rnpi"/>
+  <File Type="PL_RNPI_FILE" Name="pong_pld.rnpi"/>
+  <File Type="BOOT_MARKER_RNPI_FILE" Name="pong_boot_markers.rnpi"/>
+  <File Type="PL_MARKER_RNPI_FILE" Name="pong_pld_markers.rnpi"/>
+  <File Type="PL_MASK_RNPI_FILE" Name="pong_pld_mask.rnpi"/>
+  <File Type="PL_SHUTDOWN_RNPI_FILE" Name="pong_pld_shutdown.rnpi"/>
+  <File Type="PL_UNMASK_RNPI_FILE" Name="pong_pld_unmask.rnpi"/>
+  <File Type="PL-CLEAR-RCDO-FILE" Name="pong_pld_clear.rcdo"/>
+  <File Type="PL_MARKER_RCDO_FILE" Name="pong_pld_markers.rcdo"/>
+  <File Type="PL_MASK_RCDO_FILE" Name="pong_pld_mask.rcdo"/>
+  <File Type="PL_UNMASK_MARKER_RCDO_FILE" Name="pong_pld_unmask_markers.rcdo"/>
+  <File Type="PL_UNMASK_RCDO_FILE" Name="pong_pld_unmask.rcdo"/>
+  <FileSet Name="sources" Type="DesignSrcs" RelSrcDir="$PSRCDIR/sources_1" RelGenDir="$PGENDIR/sources_1">
+    <Filter Type="Srcs"/>
+    <File Path="$PSRCDIR/sources_1/imports/sources/bat_n_ball.vhd">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../sources/bat_n_ball.vhd"/>
+        <Attr Name="ImportTime" Val="1764873623"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/sources/clk_wiz_0.vhd">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../sources/clk_wiz_0.vhd"/>
+        <Attr Name="ImportTime" Val="1762453040"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/sources/clk_wiz_0_clk_wiz.vhd">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../sources/clk_wiz_0_clk_wiz.vhd"/>
+        <Attr Name="ImportTime" Val="1762453050"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/sources/leddec16.vhd">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../sources/leddec16.vhd"/>
+        <Attr Name="ImportTime" Val="1762453001"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/sources/vga_sync.vhd">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../sources/vga_sync.vhd"/>
+        <Attr Name="ImportTime" Val="1762453066"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/sources/pong.vhd">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../sources/pong.vhd"/>
+        <Attr Name="ImportTime" Val="1764095415"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <Config>
+      <Option Name="DesignMode" Val="RTL"/>
+      <Option Name="TopModule" Val="pong"/>
+      <Option Name="TopAutoSet" Val="TRUE"/>
+    </Config>
+  </FileSet>
+  <FileSet Name="constrs_in" Type="Constrs" RelSrcDir="$PSRCDIR/constrs_1" RelGenDir="$PGENDIR/constrs_1">
+    <Filter Type="Constrs"/>
+    <File Path="$PSRCDIR/constrs_1/imports/sources/pong.xdc">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../sources/pong.xdc"/>
+        <Attr Name="ImportTime" Val="1762453094"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+      </FileInfo>
+    </File>
+    <Config>
+      <Option Name="ConstrsType" Val="XDC"/>
+    </Config>
+  </FileSet>
+  <FileSet Name="utils" Type="Utils" RelSrcDir="$PSRCDIR/utils_1" RelGenDir="$PGENDIR/utils_1">
+    <Filter Type="Utils"/>
+    <File Path="$PSRCDIR/utils_1/imports/synth_1/pong.dcp">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedInSteps" Val="synth_1"/>
+        <Attr Name="AutoDcp" Val="1"/>
+      </FileInfo>
+    </File>
+    <Config>
+      <Option Name="TopAutoSet" Val="TRUE"/>
+    </Config>
+  </FileSet>
+  <Strategy Version="1" Minor="2">
+    <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2025"/>
+    <Step Id="init_design"/>
+    <Step Id="opt_design"/>
+    <Step Id="power_opt_design"/>
+    <Step Id="place_design"/>
+    <Step Id="post_place_power_opt_design"/>
+    <Step Id="phys_opt_design"/>
+    <Step Id="route_design"/>
+    <Step Id="post_route_phys_opt_design"/>
+    <Step Id="write_bitstream"/>
+    <Step Id="write_device_image"/>
+  </Strategy>
+</GenRun>
