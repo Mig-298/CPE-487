@@ -177,21 +177,22 @@ BEGIN
         end loop;
     END PROCESS;
 
-    fooddraw : PROCESS (pixel_row, pixel_col, food_list) is
-        VARIABLE not_eaten, food_x, food_y : INTEGER;
-        VARIABLE in_food : std_logic := '0';
+    fooddraw : PROCESS (pixel_row, pixel_col, food_list) IS
+    VARIABLE in_food : std_logic := '0';
+    VARIABLE food_x, food_y, not_eaten : INTEGER;
     BEGIN
         in_food := '0';
         FOR index IN food_list'RANGE LOOP
-            not_eaten := food_list(index)(0);
+            not_eaten := food_list(index)(0);  -- integer 0/1
             food_x := food_list(index)(1);
             food_y := food_list(index)(2);
             
-            IF not_eaten = '1' AND (pixel_col >= food_x - food_size AND pixel_col <= food_x + food_size) AND 
-                (pixel_row >= food_y - food_size AND pixel_row <= food_y + food_size) THEN
-                is_in_food := '1';
+            IF not_eaten = 1 AND
+            (pixel_col >= food_x - food_size AND pixel_col <= food_x + food_size) AND 
+            (pixel_row >= food_y - food_size AND pixel_row <= food_y + food_size) THEN
+                in_food := '1';  -- mark that this pixel is on a food
             END IF;
-            food_on <= in_food;
         END LOOP;
+        food_on <= in_food; 
     END PROCESS;
 END Behavioral;
