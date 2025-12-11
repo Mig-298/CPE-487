@@ -476,10 +476,10 @@ BEGIN
 
             IF ghost_dir = "00" THEN --up 
                 new_gy := ghost1_y -  TO_UNSIGNED(MOVE_SPEED, ghost1_y'LENGTH);
-            IF ghost_dir = "01" THEN -- right
+            ELSIF ghost_dir = "01" THEN -- right
                 new_gx := ghost1_x + TO_UNSIGNED(MOVE_SPEED, ghost1_x'LENGTH);
             ELSIF ghost_dir = "11"  
-                new_gy := ghost1_y -  TO_UNSIGNED(MOVE_SPEED, ghost1_y'LENGTH);
+                new_gy := ghost1_y +  TO_UNSIGNED(MOVE_SPEED, ghost1_y'LENGTH);
             ELSE -- left 
                 new_gx := ghost1_x - TO_UNSIGNED(MOVE_SPEED, ghost1_x'LENGTH);
             END IF;
