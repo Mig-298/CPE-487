@@ -32,7 +32,7 @@ ARCHITECTURE Behavioral OF pacman IS
     CONSTANT walls_to_draw : wall_cord_list := 
     (
     0  => ((  0,   60), (799,   60-wall_int)),   -- bottom
-    1  => ((  0,  560), (799, 560-wall_int)),   -- top  
+    1  => ((  0,  540), (799, 540-wall_int)),   -- top  
     2  => ((  0,  560), (0+wall_int,   60)),   -- left
     3  => ((799-wall_int,  560), (799,   60)),   -- right
     4  => ((60,  180), (200, 120)),   
@@ -307,12 +307,13 @@ BEGIN
             -- reset food 
             FOOD_LIST <= FOOD_LIST_INIT;
             game_on <= '1';
+        ELSE
             IF food_on = '1' THEN
                 FOR index IN food_list'RANGE LOOP
                     food_x := food_list(index)(1);
                     food_y := food_list(index)(2);
-                    IF (pac_x >= food_x - food_size AND pac_x <= food_x + food_size) AND 
-                       (pac_y >= food_y - food_size AND pac_y <= food_y + food_size) THEN
+                    IF ((pac_x + pac_size) >= (food_x - food_size)) AND ((pac_x + pac_size) <= (food_x + food_size)) AND 
+                       ((pac_y + pac_size) >= (food_y - food_size)) AND ((pac_y <= food_y) <= (pac_size + food_size)) THEN
                             food_list(index)(0) <= 0; -- mark as eaten 
                     END IF;
                 END LOOP;
@@ -474,16 +475,15 @@ BEGIN
             new_gx := ghost1_x;
             new_gy := ghost1_y;
 
-            IF ghost_dir = "00" THEN --up 
-                new_gy := ghost1_y -  TO_UNSIGNED(MOVE_SPEED, ghost1_y'LENGTH);
-            ELSIF ghost_dir = "01" THEN -- right
+            IF ghost_dir = "00" THEN -- UP
+                new_gy := ghost1_y - TO_UNSIGNED(MOVE_SPEED, ghost1_y'LENGTH);
+            ELSIF ghost_dir = "01" THEN  -- RIGHT                 
                 new_gx := ghost1_x + TO_UNSIGNED(MOVE_SPEED, ghost1_x'LENGTH);
-            ELSIF ghost_dir = "11"  
-                new_gy := ghost1_y +  TO_UNSIGNED(MOVE_SPEED, ghost1_y'LENGTH);
-            ELSE -- left 
+             ELSIF ghost_dir = "11" THEN -- DOWN
+                new_gy := ghost1_y + TO_UNSIGNED(MOVE_SPEED, ghost1_y'LENGTH);
+             ELSE -- LEFT
                 new_gx := ghost1_x - TO_UNSIGNED(MOVE_SPEED, ghost1_x'LENGTH);
             END IF;
-            
 
             -- check for wall hit
             blocked := '0';
@@ -506,21 +506,23 @@ BEGIN
                 ghost1_y <= new_gy;
             ELSE
                 -- bounce
-                IF ghost_dir = "00" THEN -- was going up
-                    ghost_dir <= "01"; -- start going right 
-                    new_gx    := ghost1_x + TO_UNSIGNED(MOVE_SPEED, ghost1_x'LENGTH);
-                ELSIF ghost_dir = "01" THEN --was going right 
-                    ghost_dir <= "11"; --start going downn
-                    new_gy := ghost1_y + TO_UNSIGNED(MOVE_SPEED, ghost1_y'LENGTH); 
-                ELSIF ghost_dir = "11" THEN  -- was going down 
-                    ghost_dir <= "10"; --start going left 
-                    new_gx    := ghost1_x - TO_UNSIGNED(MOVE_SPEED, ghost1_x'LENGTH);
-                ELSE  --was going left
-                    ghost_dir <= "00"; --start going right
-                    new_gy := ghost1_y + TO_UNSIGNED(MOVE_SPEED, ghost1_y'LENGTH); 
-                END IF;
-
-                blocked := '0';
+                WHILE blocked = '1' loop
+                    IF ghost_dir = "00" THEN -- was going up
+                        ghost_dir <= "01"; -- start going right 
+                        new_gx    := ghost1_x + TO_UNSIGNED(MOVE_SPEED, ghost1_x'LENGTH);
+                    ELSIF ghost_dir = "01" THEN --was going right 
+                        ghost_dir <= "11"; --start going downn
+                        new_gy := ghost1_y + TO_UNSIGNED(MOVE_SPEED, ghost1_y'LENGTH); 
+                    ELSIF ghost_dir = "11" THEN  -- was going down 
+                        ghost_dir <= "10"; --start going left 
+                        new_gx    := ghost1_x - TO_UNSIGNED(MOVE_SPEED, ghost1_x'LENGTH);
+                    ELSE  --was going left
+                        ghost_dir <= "00"; --start going right
+                        new_gy := ghost1_y + TO_UNSIGNED(MOVE_SPEED, ghost1_y'LENGTH); 
+                    END IF;
+                END LOOP;
+                
+                
                 FOR i IN walls_to_draw'RANGE LOOP
                     wc_start := walls_to_draw(i)(0);
                     wc_end   := walls_to_draw(i)(1);
