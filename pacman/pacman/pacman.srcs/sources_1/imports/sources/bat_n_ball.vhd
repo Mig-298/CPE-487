@@ -24,6 +24,7 @@ END pacman;
 
 ARCHITECTURE Behavioral OF pacman IS
     -- wall variables
+    TYPE direction_list is array (2 downto 0) of STD_LOGIC_VECTOR(1 downto 0);
     SIGNAL wall_int : integer := 10;
     TYPE cord is array(0 to 1) of INTEGER;
     TYPE wall_cord is array(0 to 1) of cord;
@@ -190,14 +191,8 @@ ARCHITECTURE Behavioral OF pacman IS
     SIGNAL FOOD_LIST : food_coord_list := FOOD_LIST_INIT;
     
     type rand_direction_list is array (0 to 19) of std_logic_vector(1 downto 0); 
-    CONSTANT DIRECTIONS : rand_direction_list := (
-    "10", "00", "11", "01", "10",
-    "00", "11", "10", "01", "00",
-    "11", "10", "01", "00", "11",
-    "10", "01", "00", "11", "10"
-    );
 
-    SIGNAL dir_index : INTEGER := 0;
+
     
     CONSTANT pac_size : INTEGER := 15; 
     CONSTANT ghost_size : INTEGER := 10; 
@@ -582,6 +577,10 @@ BEGIN
         VARIABLE cord_end   : cord;
         VARIABLE g_min_x, g_max_x : UNSIGNED(10 DOWNTO 0);
         VARIABLE g_min_y, g_max_y : UNSIGNED(10 DOWNTO 0);
+        VARIABLE i: INTEGER;
+        VARIABLE count : INTEGER := 0; 
+        VARIABLE dir_choice_list : direction_list; 
+        
     BEGIN
         -- dir encoding:
         -- "00" = up, "01" = right, "11" = down, "10" = left
@@ -589,7 +588,7 @@ BEGIN
             IF reset = '1' THEN
                 ghost1_x  <= STARTING_GHOST_X;
                 ghost1_y  <= STARTING_GHOST_Y;
-                dir_index <= 0;
+                i := -1;
                 ghost_dir <= "01";  -- start moving right
             ELSIF ghost_tick = '1' THEN
                 -- start from current center
@@ -633,11 +632,30 @@ BEGIN
                     -- move in current direction
                     ghost1_x <= new_gx;
                     ghost1_y <= new_gy;
+                    i=-1;
                 ELSE
-                    -- bounce: rotate direction (up→right→down→left→up)
-                    ghost_dir <= DIRECTIONS(dir_index);
-                    dir_index <= (dir_index + 1) MOD DIRECTIONS'length;
+                    count = count + 1; 
+                    -- pick new somewhat-random direction
+                    if i = -1 then  -- first time running into a blocked wall 
+                        if ghost_dir = "00" or ghost_dir = "11" then -- try horizontal movement first 
+                            if count mod 2 = 0 then 
+                                dir_choice_list := ("01", "10", not ghost_dir); -- try right first
+                            else
+                                dir_choice_list :=  "01"("10", not ghost_dir); -- try left first 
+                            end if;
+                        else
+                            if count mod 2 = 0 then 
+                                dir_choice_list := ("00", "11", not ghost_dir); -- try up first
+                            else
+                                dir_choice_list := ("11", "00", not ghost_dir); -- try down first 
+                        end if;
+                    elsif i>3 then 
+                        i=-1;
+                    end if;
 
+                    i=i+1; 
+                    ghost_dir <= dir_choice_list(i);
+    
                     -- recompute candidate move in new direction from current center
                     new_gx := ghost1_x;
                     new_gy := ghost1_y;
@@ -674,6 +692,7 @@ BEGIN
                     IF blocked = '0' THEN
                         ghost1_x <= new_gx;
                         ghost1_y <= new_gy;
+                        i=-1;
                     END IF;
                 END IF;
             END IF;
