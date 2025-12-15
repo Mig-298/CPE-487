@@ -3,21 +3,11 @@ USE IEEE.STD_LOGIC_1164.ALL;
 USE IEEE.math_real.all;
 USE IEEE.numeric_std.all;
 
-ENTITY bat_n_ball IS
+ENTITY pacman IS
     PORT (
         v_sync : IN STD_LOGIC;
         pixel_row : IN UNSIGNED(10 DOWNTO 0);
         pixel_col : IN UNSIGNED(10 DOWNTO 0);
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-        pac_x : IN UNSIGNED(10 DOWNTO 0);
-        pac_y : IN UNSIGNED(10 DOWNTO 0);
-        pac_dir : IN UNSIGNED(1 DOWNTO 0);
-        bat_x : IN UNSIGNED (10 DOWNTO 0); -- current bat x position
-        serve : IN STD_LOGIC; -- initiates serve
-=======
-=======
->>>>>>> Stashed changes
         reset : IN STD_LOGIC; 
         pac_dir : IN STD_LOGIC;
         clk_in : IN STD_LOGIC;
@@ -26,42 +16,46 @@ ENTITY bat_n_ball IS
         btn_up : IN STD_LOGIC;
         btn_down : IN STD_LOGIC;
         currscore : OUT STD_LOGIC_VECTOR (15 DOWNTO 0);
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
         red : OUT STD_LOGIC;
         green : OUT STD_LOGIC;
         blue : OUT STD_LOGIC
     );
-END bat_n_ball;
+END pacman;
 
-ARCHITECTURE Behavioral OF bat_n_ball IS
+ARCHITECTURE Behavioral OF pacman IS
     -- wall variables
     SIGNAL wall_int : integer := 10;
     TYPE cord is array(0 to 1) of INTEGER;
     TYPE wall_cord is array(0 to 1) of cord;
-    TYPE wall_cord_list is array(0 to 7) of wall_cord;
+    TYPE wall_cord_list is array(0 to 20) of wall_cord;
     CONSTANT walls_to_draw : wall_cord_list := 
     (
-        0 => ((0, 1+wall_int), (799, 1)), -- Bottom Wall
-        1 => ((0, 599), (799, 599-wall_int)), -- Top Wall
-        2 => ((0, 599), (0+wall_int, 0)), -- Left Wall
-        3 => ((799-wall_int, 599), (799, 0)), -- Right Wall, Last Outer Wall
-        
-        4 => ((60, 180), (200, 110)),
-        5 => ((230, 170), (260, 60)),
-        6 => ((260, 100), (370, 60)),
-        7 => ((350, 220), (420, 150))
-    );
+    0  => ((  0,   60), (799,   60-wall_int)),   -- bottom
+    1  => ((  0,  560), (799, 560-wall_int)),   -- top  
+    2  => ((  0,  560), (0+wall_int,   60)),   -- left
+    3  => ((799-wall_int,  560), (799,   60)),   -- right
+    4  => ((60,  180), (200, 120)),   
+    5  => ((260,  180), (290, 120)),   
+    6  => ((350,  210), (420, 120)),   
+    7  => ((670,  130), (720, 60)),   
+    8  => ((550,  250), (600, 200)),  
+    9  => ((510,  250), (600, 200)),  
+    10 => ((60,  370), (90, 260)),   
+    11 => ((60,  260), (170, 230)),   
+    12 => ((220,  300), (250, 230)),   
+    13 => ((520,  340), (600, 310)),   
+    14 => ((670,  450), (720, 200)),   
+    15 => ((720,  330), (799, 280)),
+    16 => ((470,  490), (600, 400)),
+    17 => ((350,  560), (400, 400)),
+    18 => ((60,  500), (280, 420)),
+    19 => ((150,  420), (200, 340)),
+    20 => ((550, 200), (600, 120))
+);
     
-
-TYPE food_coord IS ARRAY(0 TO 2) OF INTEGER;
-TYPE food_coord_list IS ARRAY(129 DOWNTO 0) OF food_coord;
-    TYPE food_coord IS ARRAY(0 TO 2) OF INTEGER;
-TYPE food_coord_list IS ARRAY(129 DOWNTO 0) OF food_coord;
-
-constant FOOD_LIST : food_coord_list <= (
+    TYPE food_coord is array(0 to 2) of INTEGER;
+    TYPE food_coord_list is array(129 downto 0) of food_coord;
+    CONSTANT FOOD_LIST_INIT : food_coord_list := (
     129 => (1, 715, 165),
     128 => (1, 675, 165),
     127 => (1, 755, 245),
@@ -193,20 +187,6 @@ constant FOOD_LIST : food_coord_list <= (
     1   => (1, 315, 165),
     0   => (1, 315, 205)
 );
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-
-=======
-    SIGNAL FOOD_LIST : food_coord_list := FOOD_LIST_INIT;
->>>>>>> Stashed changes
-    
-    CONSTANT pac_size : INTEGER := 10;
-    CONSTANT food_size : INTEGER := 5;
-
-<<<<<<< Updated upstream
-    SIGNAL pac_on : STD_LOGIC;
-=======
-=======
     SIGNAL FOOD_LIST : food_coord_list := FOOD_LIST_INIT;
     
     CONSTANT pac_size : INTEGER := 15; 
@@ -225,33 +205,45 @@ constant FOOD_LIST : food_coord_list <= (
     SIGNAL pac_y : UNSIGNED(10 downto 0) := STARTING_PAC_Y; 
      CONSTANT MOVE_SPEED : INTEGER := 1;
 
->>>>>>> Stashed changes
     SIGNAL curr_alive : STD_LOGIC := '1';
     SIGNAL curr_score : INTEGER := 0;
 
     SIGNAL wall_on : STD_LOGIC; 
     SIGNAL pac_on : STD_LOGIC; 
->>>>>>> Stashed changes
     SIGNAL food_on : STD_LOGIC;
-    SIGNAL wall_on : STD_LOGIC;
-    SIGNAL game_on : STD_LOGIC := '0'; -- indicates whether ball is in play
+    SIGNAL color_on : STD_LOGIC_VECTOR(2 DOWNTO 0);
+    SIGNAL ghost1_on : STD_LOGIC;
+    SIGNAL game_on : STD_LOGIC := '0';
+    
+    signal movecount  : UNSIGNED(19 DOWNTO 0) := (OTHERS => '0'); -- adjust width
+    signal tickspeed : std_logic := '0';
+
+    
+    TYPE color_array_t      IS ARRAY (0 TO 7) OF STD_LOGIC_VECTOR(2 DOWNTO 0);
+    CONSTANT COLORS : color_array_t := (
+        "100", -- red
+        "010", -- green
+        "001", -- blue
+        "110", -- yellow
+        "101", -- magenta
+        "011", -- cyan
+        "111", -- white
+        "000"  -- black
+    );
+    
+    CONSTANT PAC_COLOR : INTEGER := 3; -- yellow
+    CONSTANT WALL_COLOR : INTEGER := 7; -- black
+    CONSTANT BACKGROUND_COLOR : INTEGER := 6; -- white
+    CONSTANT FOOD_COLOR : INTEGER := 0; -- red
+    
+    TYPE ghost_color_array_t IS ARRAY (0 TO 1) OF INTEGER;
+    CONSTANT GHOST_COLORS : ghost_color_array_t := (4, 5); -- green, blue, magenta
+    SIGNAL lfsr       : UNSIGNED(7 DOWNTO 0) := x"5A";  -- non-zero seed
+    SIGNAL ghost_dir : STD_LOGIC_VECTOR(1 downto 0) := "01";
+    SIGNAL ghost_cnt  : UNSIGNED(19 DOWNTO 0) := (OTHERS => '0');
+    SIGNAL ghost_tick : STD_LOGIC := '0';
 
 BEGIN
-<<<<<<< Updated upstream
-    red <= NOT wall_on; -- color setup for red ball and cyan bat on white background
-    green <= food_on; 
-    blue <= '1';
-    -- process to draw walls
-    pacdraw: PROCESS(pac_x, pac_y, pixel_row, pixel_col, pac_dir) IS 
-        VARIABLE vx, vy : UNSIGNED(10 DOWNTO 0);
-        VARIABLE xd, yd : STD_LOGIC;  --whether pixel_col/row is to the right/above pacx/y
-        CONSTANT pi : REAL := 3.14159;
-        CONSTANT tan0 : REAL := 1.73205; -- tan(2pi/6)
-        CONSTANT tan1 : REAL := 0.57735; -- tan(pi/6)
-    BEGIN
-        IF pixel_col <= pac_x THEN -- vx = |ball_x - pixel_col|
-            vx := pac_x - pixel_col;
-=======
     red <=  color_on(2);
     green <= color_on(1);
     blue <=  color_on(0);
@@ -269,12 +261,9 @@ BEGIN
             color_on <= COLORS(FOOD_COLOR);
         ELSIF ghost1_on = '1' THEN
             color_on <= COLORS(GHOST_COLORS(0));
->>>>>>> Stashed changes
         ELSE
-            vx := pixel_col - pac_x;
+            color_on <= COLORS(BACKGROUND_COLOR);
         END IF;
-<<<<<<< Updated upstream
-=======
     END PROCESS;
 
     pacdraw: PROCESS(pac_x, pac_y, pixel_row, pixel_col, pac_dir) IS
@@ -290,24 +279,10 @@ BEGIN
         ELSE
             vx := pixel_col - pac_x;
         END IF;
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
         IF pixel_row <= pac_y THEN -- vy = |ball_y - pixel_row|
             vy := pac_y - pixel_row;
         ELSE
             vy := pixel_row - pac_y;
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-        END IF;
-        IF ((vx * vx) + (vy * vy)) < (pac_size * pac_size) THEN -- test if radial distance < bsize
-            pac_on <= game_on;
-        ELSE
-            pac_on <= '0';
-=======
-=======
->>>>>>> Stashed changes
         END IF;
         IF ((vx * vx) + (vy * vy) < PAC_R2) THEN -- test if radial distance < bsize
             pac_on <= '1';
@@ -431,7 +406,6 @@ BEGIN
                     pac_y <= new_pac_y;
                 END IF;
             END IF;
->>>>>>> Stashed changes
         END IF;
     END PROCESS;
 
@@ -439,7 +413,6 @@ BEGIN
         VARIABLE starting_cord : cord; 
         VARIABLE ending_cord : cord;
         VARIABLE in_wall : std_logic := '0';
-        VARIABLE col_i, row_i : INTEGER;
     BEGIN
         in_wall := '0';
         for index in wall_cord_list'range loop
@@ -472,8 +445,6 @@ BEGIN
         END LOOP;
         food_on <= in_food; 
     END PROCESS;
-<<<<<<< Updated upstream
-=======
     
     ghost1draw : PROCESS(pixel_row, pixel_col, ghost1_x, ghost1_y) IS
         VARIABLE gx_left, gx_right  : UNSIGNED(10 DOWNTO 0);
@@ -715,5 +686,4 @@ BEGIN
         END IF;
     END PROCESS;
 
->>>>>>> Stashed changes
 END Behavioral;
