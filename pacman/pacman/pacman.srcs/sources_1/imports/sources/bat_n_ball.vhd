@@ -9,12 +9,15 @@ ENTITY bat_n_ball IS
         pixel_row : IN UNSIGNED(10 DOWNTO 0);
         pixel_col : IN UNSIGNED(10 DOWNTO 0);
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         pac_x : IN UNSIGNED(10 DOWNTO 0);
         pac_y : IN UNSIGNED(10 DOWNTO 0);
         pac_dir : IN UNSIGNED(1 DOWNTO 0);
         bat_x : IN UNSIGNED (10 DOWNTO 0); -- current bat x position
         serve : IN STD_LOGIC; -- initiates serve
 =======
+=======
+>>>>>>> Stashed changes
         reset : IN STD_LOGIC; 
         pac_dir : IN STD_LOGIC;
         clk_in : IN STD_LOGIC;
@@ -23,6 +26,9 @@ ENTITY bat_n_ball IS
         btn_up : IN STD_LOGIC;
         btn_down : IN STD_LOGIC;
         currscore : OUT STD_LOGIC_VECTOR (15 DOWNTO 0);
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
         red : OUT STD_LOGIC;
         green : OUT STD_LOGIC;
@@ -188,6 +194,7 @@ constant FOOD_LIST : food_coord_list <= (
     0   => (1, 315, 205)
 );
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
 =======
     SIGNAL FOOD_LIST : food_coord_list := FOOD_LIST_INIT;
@@ -199,6 +206,26 @@ constant FOOD_LIST : food_coord_list <= (
 <<<<<<< Updated upstream
     SIGNAL pac_on : STD_LOGIC;
 =======
+=======
+    SIGNAL FOOD_LIST : food_coord_list := FOOD_LIST_INIT;
+    
+    CONSTANT pac_size : INTEGER := 15; 
+    CONSTANT ghost_size : INTEGER := 10; 
+    CONSTANT food_size : INTEGER := 5;
+    
+    CONSTANT STARTING_GHOST_X : UNSIGNED(10 downto 0) := to_unsigned(315, 11); 
+    CONSTANT STARTING_GHOST_Y : UNSIGNED(10 downto 0) := to_unsigned(365, 11);
+    SIGNAL ghost1_x : UNSIGNED(10 downto 0) := STARTING_GHOST_X;
+    SIGNAL ghost1_y : UNSIGNED(10 downto 0) := STARTING_GHOST_Y;
+    
+    
+    CONSTANT STARTING_PAC_X : UNSIGNED(10 downto 0) := to_unsigned(350, 11);
+    CONSTANT STARTING_PAC_Y : UNSIGNED(10 downto 0) := to_unsigned(285, 11);
+    SIGNAL pac_x : UNSIGNED(10 downto 0) := STARTING_PAC_X; 
+    SIGNAL pac_y : UNSIGNED(10 downto 0) := STARTING_PAC_Y; 
+     CONSTANT MOVE_SPEED : INTEGER := 1;
+
+>>>>>>> Stashed changes
     SIGNAL curr_alive : STD_LOGIC := '1';
     SIGNAL curr_score : INTEGER := 0;
 
@@ -263,11 +290,15 @@ BEGIN
         ELSE
             vx := pixel_col - pac_x;
         END IF;
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
         IF pixel_row <= pac_y THEN -- vy = |ball_y - pixel_row|
             vy := pac_y - pixel_row;
         ELSE
             vy := pixel_row - pac_y;
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
         END IF;
         IF ((vx * vx) + (vy * vy)) < (pac_size * pac_size) THEN -- test if radial distance < bsize
@@ -275,6 +306,8 @@ BEGIN
         ELSE
             pac_on <= '0';
 =======
+=======
+>>>>>>> Stashed changes
         END IF;
         IF ((vx * vx) + (vy * vy) < PAC_R2) THEN -- test if radial distance < bsize
             pac_on <= '1';
