@@ -411,7 +411,7 @@ END PROCESS;
             IF reset = '1' THEN
                 pac_x <= STARTING_PAC_X;
                 pac_y <= STARTING_PAC_Y;
-            ELSIF tickspeed = '1' THEN        -- only move on slow tick
+            ELSIF tickspeed = '1'  THEN        -- only move on slow tick
                 new_pac_x := pac_x;
                 new_pac_y := pac_y;
 
@@ -424,7 +424,7 @@ END PROCESS;
                 ELSIF btn_down = '1' THEN
                     new_pac_y := pac_y + to_unsigned(MOVE_SPEED, pac_y'length);
                 END IF;
-
+                -- check for wall collisions
                 wall_collide := '0';
                 FOR index in walls_to_draw'RANGE LOOP
                     starting_cord := walls_to_draw(index)(0);
@@ -437,6 +437,7 @@ END PROCESS;
                         EXIT;
                     END IF;
                 END LOOP;
+                -- update position if no collision
                 IF wall_collide = '0' THEN
                     pac_x <= new_pac_x;
                     pac_y <= new_pac_y;
