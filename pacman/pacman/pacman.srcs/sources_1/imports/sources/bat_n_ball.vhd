@@ -188,11 +188,22 @@ ARCHITECTURE Behavioral OF pacman IS
     1   => (1, 315, 165),
     0   => (1, 315, 205)
 );
-    signal FOOD_LIST : food_coord_list := FOOD_LIST_INIT;
+    SIGNAL FOOD_LIST : food_coord_list := FOOD_LIST_INIT;
     
     CONSTANT pac_size : INTEGER := 15; 
     CONSTANT ghost_size : INTEGER := 10; 
     CONSTANT food_size : INTEGER := 5;
+
+    type rand_direction_list is array (0 to 19) of std_logic_vector(1 downto 0); 
+    CONSTANT DIRECTIONS : rand_direction_list := (
+    "10", "00", "11", "01", "10",
+    "00", "11", "10", "01", "00",
+    "11", "10", "01", "00", "11",
+    "10", "01", "00", "11", "10"
+    );
+
+    SIGNAL dir_index : INTEGER := 0;
+
     
     CONSTANT STARTING_GHOST_X : UNSIGNED(10 downto 0) := to_unsigned(315, 11); 
     CONSTANT STARTING_GHOST_Y : UNSIGNED(10 downto 0) := to_unsigned(365, 11);
@@ -253,7 +264,9 @@ BEGIN
     
     select_color: PROCESS(ghost1_on, wall_on, pac_on, food_on) IS
     BEGIN
-        IF wall_on = '1' THEN
+        if curr_alive = '0' THEN 
+            color_on <= "000"; 
+        ELSIF wall_on = '1' THEN
             color_on <= COLORS(WALL_COLOR);
         ELSIF pac_on = '1' THEN
             color_on <= COLORS(PAC_COLOR);
@@ -573,7 +586,7 @@ BEGIN
     END IF;
 END PROCESS;
 
-            ghost_timer : PROCESS(clk_in)
+    ghost_timer : PROCESS(clk_in)
     BEGIN
         IF rising_edge(clk_in) THEN
             IF reset = '1' THEN
@@ -611,6 +624,7 @@ END PROCESS;
             IF reset = '1' THEN
                 ghost1_x  <= STARTING_GHOST_X;
                 ghost1_y  <= STARTING_GHOST_Y;
+                dir_index <= 0;
                 ghost_dir <= "01";  -- start moving right
             ELSIF ghost_tick = '1' THEN
                 -- start from current center
@@ -656,15 +670,8 @@ END PROCESS;
                     ghost1_y <= new_gy;
                 ELSE
                     -- bounce: rotate direction (up→right→down→left→up)
-                    IF ghost_dir = "00" THEN       -- was going up
-                        ghost_dir <= "01";         -- try right
-                    ELSIF ghost_dir = "01" THEN    -- was going right
-                        ghost_dir <= "11";         -- try down
-                    ELSIF ghost_dir = "11" THEN    -- was going down
-                        ghost_dir <= "10";         -- try left
-                    ELSE                           -- was going left ("10")
-                        ghost_dir <= "00";         -- try up
-                    END IF;
+                    ghost_dir <= DIRECTIONS(dir_index);
+                    dir_index <= (dir_index + 1) MOD DIRECTIONS'length;
 
                     -- recompute candidate move in new direction from current center
                     new_gx := ghost1_x;
