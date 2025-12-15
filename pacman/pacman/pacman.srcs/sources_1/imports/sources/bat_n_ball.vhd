@@ -8,28 +8,26 @@ ENTITY pacman IS
         v_sync : IN STD_LOGIC;
         pixel_row : IN UNSIGNED(10 DOWNTO 0);
         pixel_col : IN UNSIGNED(10 DOWNTO 0);
-        reset : IN STD_LOGIC; 
-        pac_dir : IN STD_LOGIC;
         clk_in : IN STD_LOGIC;
         btn_left : IN STD_LOGIC;
         btn_right : IN STD_LOGIC;
         btn_up : IN STD_LOGIC;
         btn_down : IN STD_LOGIC;
-        currscore : OUT STD_LOGIC_VECTOR (15 DOWNTO 0);
+        reset : IN STD_LOGIC; 
         red : OUT STD_LOGIC;
         green : OUT STD_LOGIC;
-        blue : OUT STD_LOGIC
+        blue : OUT STD_LOGIC;
+        currscore : OUT STD_LOGIC_VECTOR (15 DOWNTO 0)
     );
 END pacman;
 
 ARCHITECTURE Behavioral OF pacman IS
-    -- wall variables
+    -- Waal Coordinates
     SIGNAL wall_int : integer := 10;
     TYPE cord is array(0 to 1) of INTEGER;
     TYPE wall_cord is array(0 to 1) of cord;
     TYPE wall_cord_list is array(0 to 20) of wall_cord;
-    CONSTANT walls_to_draw : wall_cord_list := 
-    (
+    CONSTANT walls_to_draw : wall_cord_list := (
     0  => ((  0,   60), (799,   60-wall_int)),   -- bottom
     1  => ((  0,  560), (799, 560-wall_int)),   -- top  
     2  => ((  0,  560), (0+wall_int,   60)),   -- left
@@ -39,11 +37,11 @@ ARCHITECTURE Behavioral OF pacman IS
     6  => ((350,  210), (420, 120)),   
     7  => ((670,  130), (720, 60)),   
     8  => ((550,  250), (600, 200)),  
-    9  => ((510,  250), (600, 200)),  
+    9  => ((510,  250), (670, 200)),  
     10 => ((60,  370), (90, 260)),   
     11 => ((60,  260), (170, 230)),   
     12 => ((220,  300), (250, 230)),   
-    13 => ((520,  340), (600, 310)),   
+    13 => ((510,  340), (600, 250)),  
     14 => ((670,  450), (720, 200)),   
     15 => ((720,  330), (799, 280)),
     16 => ((470,  490), (600, 400)),
@@ -52,9 +50,9 @@ ARCHITECTURE Behavioral OF pacman IS
     19 => ((150,  420), (200, 340)),
     20 => ((550, 200), (600, 120))
 );
-    
+    -- Food Coordinates / Coordinates
     TYPE food_coord is array(0 to 2) of INTEGER;
-    TYPE food_coord_list is array(129 downto 0) of food_coord;
+    TYPE food_coord_list is array(147 downto 0) of food_coord;
     CONSTANT FOOD_LIST_INIT : food_coord_list := (
         147 => (1, 755, 485),
         146 => (1, 635, 125),
@@ -210,25 +208,36 @@ ARCHITECTURE Behavioral OF pacman IS
     );
     SIGNAL FOOD_LIST : food_coord_list := FOOD_LIST_INIT;
     
+    -- Direction Variables
+    SIGNAL dir_index : INTEGER := 0;
+    
+    -- Sizing Variables
     CONSTANT pac_size : INTEGER := 15; 
-    CONSTANT ghost_size : INTEGER := 10; 
+    CONSTANT ghost_size : INTEGER := 7; 
     CONSTANT food_size : INTEGER := 5;
     
+    type rand_direction_list is array (0 to 19) of std_logic_vector(1 downto 0); 
+    CONSTANT directions : rand_direction_list := ( -- 00 UP, 01 RIGHT, 11 DOWN, 10 LEFT
+    "01", "00", "11", "01", "00",
+    "11", "10", "00", "01", "11",
+    "01", "10", "00", "10", "11",
+    "01", "00", "01", "11", "10"
+    );
+    
+    -- Position Starting Values
     CONSTANT STARTING_GHOST_X : UNSIGNED(10 downto 0) := to_unsigned(315, 11); 
     CONSTANT STARTING_GHOST_Y : UNSIGNED(10 downto 0) := to_unsigned(365, 11);
     SIGNAL ghost1_x : UNSIGNED(10 downto 0) := STARTING_GHOST_X;
     SIGNAL ghost1_y : UNSIGNED(10 downto 0) := STARTING_GHOST_Y;
-    
-    
     CONSTANT STARTING_PAC_X : UNSIGNED(10 downto 0) := to_unsigned(350, 11);
     CONSTANT STARTING_PAC_Y : UNSIGNED(10 downto 0) := to_unsigned(285, 11);
     SIGNAL pac_x : UNSIGNED(10 downto 0) := STARTING_PAC_X; 
     SIGNAL pac_y : UNSIGNED(10 downto 0) := STARTING_PAC_Y; 
-     CONSTANT MOVE_SPEED : INTEGER := 1;
+    CONSTANT MOVE_SPEED : INTEGER := 1;
 
+    -- Flags / Scoring
     SIGNAL curr_alive : STD_LOGIC := '1';
     SIGNAL curr_score : INTEGER := 0;
-
     SIGNAL wall_on : STD_LOGIC; 
     SIGNAL pac_on : STD_LOGIC; 
     SIGNAL food_on : STD_LOGIC;
@@ -236,10 +245,12 @@ ARCHITECTURE Behavioral OF pacman IS
     SIGNAL ghost1_on : STD_LOGIC;
     SIGNAL game_on : STD_LOGIC := '0';
     
-    signal movecount  : UNSIGNED(19 DOWNTO 0) := (OTHERS => '0'); -- adjust width
+    -- Clock Helpers
+    signal movecount  : UNSIGNED(19 DOWNTO 0) := (OTHERS => '0');
     signal tickspeed : std_logic := '0';
+    SIGNAL ghost_axis_pref : STD_LOGIC := '0';  -- '0' = prefer horizontal, '1' = prefer vertical
 
-    
+    -- Color Selections    
     TYPE color_array_t      IS ARRAY (0 TO 7) OF STD_LOGIC_VECTOR(2 DOWNTO 0);
     CONSTANT COLORS : color_array_t := (
         "100", -- red
@@ -251,15 +262,14 @@ ARCHITECTURE Behavioral OF pacman IS
         "111", -- white
         "000"  -- black
     );
-    
     CONSTANT PAC_COLOR : INTEGER := 3; -- yellow
     CONSTANT WALL_COLOR : INTEGER := 7; -- black
     CONSTANT BACKGROUND_COLOR : INTEGER := 6; -- white
     CONSTANT FOOD_COLOR : INTEGER := 0; -- red
-    
     TYPE ghost_color_array_t IS ARRAY (0 TO 1) OF INTEGER;
     CONSTANT GHOST_COLORS : ghost_color_array_t := (4, 5); -- green, blue, magenta
-    SIGNAL lfsr       : UNSIGNED(7 DOWNTO 0) := x"5A";  -- non-zero seed
+    
+    
     SIGNAL ghost_dir : STD_LOGIC_VECTOR(1 downto 0) := "01";
     SIGNAL ghost_cnt  : UNSIGNED(19 DOWNTO 0) := (OTHERS => '0');
     SIGNAL ghost_tick : STD_LOGIC := '0';
@@ -287,7 +297,7 @@ BEGIN
         END IF;
     END PROCESS;
 
-    pacdraw: PROCESS(pac_x, pac_y, pixel_row, pixel_col, pac_dir) IS
+    pacdraw: PROCESS(pac_x, pac_y, pixel_row, pixel_col) IS
         VARIABLE vx, vy : UNSIGNED(10 DOWNTO 0);
         constant PAC_R2 : unsigned(10 downto 0) := to_unsigned(pac_size * pac_size, 11);
         VARIABLE xd, yd : STD_LOGIC; --whether pixel_col/row is to the right/above pacx/y
@@ -346,7 +356,9 @@ BEGIN
     END PROCESS;
     
     rst: PROCESS(curr_score, pac_on, food_on, food_list, pac_x, pac_y, reset) IS
-        VARIABLE food_x, food_y : INTEGER;
+        VARIABLE food_min_x, food_max_y, food_max_x ,food_min_y : INTEGER;
+        VARIABLE pac_min_x, pac_max_x, pac_min_y ,pac_max_y : INTEGER;
+        VARIABLE not_eaten : INTEGER;
     BEGIN
         IF reset = '1' THEN
             curr_score <= 0;
@@ -355,10 +367,20 @@ BEGIN
         else
         IF pac_on = '1' AND food_on = '1' THEN
             FOR index IN food_list'RANGE LOOP
-                food_x := food_list(index)(1);
-                food_y := food_list(index)(2);
-                IF (pac_x >= food_x - food_size AND pac_x <= food_x + food_size) AND
-                    (pac_y >= food_y - food_size AND pac_y <= food_y + food_size) THEN
+                not_eaten := food_list(index)(0);
+                
+                food_min_x := food_list(index)(1)-food_size;
+                food_max_x := food_list(index)(1)+food_size;
+                food_min_y := food_list(index)(2)+food_size;
+                food_max_y := food_list(index)(2)+food_size;
+                
+                pac_min_x := TO_INTEGER(pac_x) - pac_size;
+                pac_max_x := TO_INTEGER(pac_x) + pac_size;
+                pac_min_y := TO_INTEGER(pac_y) - pac_size;
+                pac_max_y := TO_INTEGER(pac_y) + pac_size;
+                
+                IF not_eaten = 1 AND (pac_min_x <= food_max_x AND pac_max_x >= food_min_x) AND
+                    (pac_max_y >= food_min_y AND pac_min_y <= food_max_y) THEN
                         food_list(index)(0) <= 0; -- mark as eaten
                         curr_score <= curr_score + 1;
                 END IF;
@@ -385,13 +407,13 @@ BEGIN
         END IF;
     END PROCESS;
     
-   move_pac: process(clk_in) is 
-    variable new_pac_x    : unsigned(10 downto 0);
-    variable new_pac_y    : unsigned(10 downto 0);
-    variable wall_collide : std_logic;
-    variable starting_cord : cord; 
-    variable ending_cord   : cord; 
-   BEGIN
+    move_pac: process(clk_in) is 
+        variable new_pac_x    : unsigned(10 downto 0);
+        variable new_pac_y    : unsigned(10 downto 0);
+        variable wall_collide : std_logic;
+        variable starting_cord : cord; 
+        variable ending_cord   : cord; 
+    BEGIN
         IF rising_edge(clk_in) THEN
             IF reset = '1' THEN
                 pac_x <= STARTING_PAC_X;
@@ -454,69 +476,58 @@ BEGIN
     BEGIN
         in_food := '0';
         FOR index IN food_list'RANGE LOOP
-            not_eaten := food_list(index)(0);  -- integer 0/1
+            not_eaten := food_list(index)(0);
             food_x := food_list(index)(1);
             food_y := food_list(index)(2);
             
             IF not_eaten = 1 AND
             (pixel_col >= food_x - food_size AND pixel_col <= food_x + food_size) AND 
             (pixel_row >= food_y - food_size AND pixel_row <= food_y + food_size) THEN
-                in_food := '1';  -- mark that this pixel is on a food
+                in_food := '1'; 
             END IF;
         END LOOP;
         food_on <= in_food; 
     END PROCESS;
     
     ghost1draw : PROCESS(pixel_row, pixel_col, ghost1_x, ghost1_y) IS
-        VARIABLE gx_left, gx_right  : UNSIGNED(10 DOWNTO 0);
-        VARIABLE gy_top,  gy_bottom : UNSIGNED(10 DOWNTO 0);
+        VARIABLE ghost_left, ghost_right  : UNSIGNED(10 DOWNTO 0);
+        VARIABLE ghost_top,  ghost_bottom : UNSIGNED(10 DOWNTO 0);
         VARIABLE in_body  : STD_LOGIC;
         VARIABLE in_head  : STD_LOGIC;
         VARIABLE in_feet  : STD_LOGIC;
         VARIABLE dx, dy   : UNSIGNED(10 DOWNTO 0);
         VARIABLE head_cy  : UNSIGNED(10 DOWNTO 0);
         VARIABLE dx2, dy2, r2 : UNSIGNED(21 DOWNTO 0);
-        CONSTANT GSIZE_U  : UNSIGNED(10 DOWNTO 0) := TO_UNSIGNED(ghost_size, 11);
-        CONSTANT G2SIZE_U : UNSIGNED(10 DOWNTO 0) := TO_UNSIGNED(2*ghost_size, 11);
+        CONSTANT ghost_under  : UNSIGNED(10 DOWNTO 0) := TO_UNSIGNED(ghost_size, 11);
+        CONSTANT ghost_under2 : UNSIGNED(10 DOWNTO 0) := TO_UNSIGNED(2*ghost_size, 11);
     BEGIN
-        -- bounding box around ghost center
-        gx_left  := ghost1_x - GSIZE_U;
-        gx_right := ghost1_x + GSIZE_U;
-        gy_top   := ghost1_y - G2SIZE_U;
-        gy_bottom:= ghost1_y + G2SIZE_U;
-
-        -- default off
+        ghost_left  := ghost1_x - ghost_under;
+        ghost_right := ghost1_x + ghost_under;
+        ghost_top   := ghost1_y - ghost_under2;
+        ghost_bottom:= ghost1_y + ghost_under2;
         ghost1_on <= '0';
         in_body   := '0';
         in_head   := '0';
         in_feet   := '0';
 
-        -- only draw if inside bbox
-        IF (pixel_col >= gx_left) AND (pixel_col <= gx_right) AND
-           (pixel_row >= gy_top)  AND (pixel_row <= gy_bottom) THEN
+        IF (pixel_col >= ghost_left) AND (pixel_col <= ghost_right) AND
+           (pixel_row >= ghost_top)  AND (pixel_row <= ghost_bottom) THEN
 
-        ----------------------------------------------------------------
-        -- Body: middle rectangle
-        ----------------------------------------------------------------
-            IF (pixel_row >= ghost1_y - GSIZE_U) AND
-               (pixel_row <= ghost1_y + GSIZE_U) THEN
+            -- Body
+            IF (pixel_row >= ghost1_y - ghost_under) AND
+               (pixel_row <= ghost1_y + ghost_under) THEN
                     in_body := '1';
             END IF;
 
-        ----------------------------------------------------------------
-        -- Head: top half-circle of radius ghost_size
-        -- head center Y = gy_top + ghost_size
-        ----------------------------------------------------------------
-            head_cy := gy_top + GSIZE_U;
+           -- Head
+           head_cy := ghost_top + ghost_under;
 
-        -- dx = |pixel_col - ghost1_x|
             IF pixel_col <= ghost1_x THEN
                 dx := ghost1_x - pixel_col;
             ELSE
                 dx := pixel_col - ghost1_x;
             END IF;
 
-        -- dy = |pixel_row - head_cy|
             IF pixel_row <= head_cy THEN
                 dy := head_cy - pixel_row;
             ELSE
@@ -530,45 +541,39 @@ BEGIN
             IF (dx2 + dy2) <= r2 THEN
                 in_head := '1';
             END IF;
-
-        ----------------------------------------------------------------
-        -- Feet: three rounded bumps along bottom
-        ----------------------------------------------------------------
+            
+            
             in_feet := '0';
 
-        -- feet vertical band: just below body, e.g. 0.5*ghost_size tall
-            IF (pixel_row >= ghost1_y + GSIZE_U) AND
-               (pixel_row <= ghost1_y + GSIZE_U + (GSIZE_U / 2)) THEN
-
-            -- normalize X around center: left/mid/right thirds
-            -- left foot: from center - ghost_size to center - ghost_size/3
-                IF (pixel_col >= ghost1_x - GSIZE_U) AND
-                   (pixel_col <= ghost1_x - (GSIZE_U / 3)) THEN
+            -- Feet
+       IF (pixel_row >= ghost1_y + ghost_under) AND
+               (pixel_row <= ghost1_y + ghost_under + (ghost_under2 / 2)) then
+                -- left foot
+                IF (pixel_col >= ghost1_x - ghost_under) AND
+                   (pixel_col <= ghost1_x - (ghost_under / 3)) THEN
                     in_feet := '1';
                 END IF;
 
-            -- middle foot: from center - ghost_size/3 to center + ghost_size/3
-                IF (pixel_col >= ghost1_x - (GSIZE_U / 3)) AND
-                   (pixel_col <= ghost1_x + (GSIZE_U / 3)) THEN
+                -- middle foot
+                IF (pixel_col >= ghost1_x - (ghost_under / 3)) AND
+                   (pixel_col <= ghost1_x + (ghost_under / 3)) THEN
                         in_feet := '1';
                 END IF;
 
-            -- right foot: from center + ghost_size/3 to center + ghost_size
-                IF (pixel_col >= ghost1_x + (GSIZE_U / 3)) AND
-                    (pixel_col <= ghost1_x + GSIZE_U) THEN
+                -- right foot
+                IF (pixel_col >= ghost1_x + (ghost_under / 3)) AND
+                    (pixel_col <= ghost1_x + ghost_under) THEN
                         in_feet := '1';
                     END IF;
-               END IF;
-
-        ----------------------------------------------------------------
-        -- Final combine
-        ----------------------------------------------------------------
-                IF (in_head = '1') OR (in_body = '1') OR (in_feet = '1') THEN
-                    ghost1_on <= '1';
-                ELSE
-                    ghost1_on <= '0';
-                END IF;
+             END IF;
+               
+               -- Final Check
+            IF (in_head = '1') OR (in_body = '1') OR (in_feet = '1') THEN
+                 ghost1_on <= '1';
+            ELSE
+                 ghost1_on <= '0';
             END IF;
+        END IF;
     END PROCESS;
 
     ghost_timer : PROCESS(clk_in)
@@ -577,15 +582,12 @@ BEGIN
             IF reset = '1' THEN
                 ghost_cnt  <= (OTHERS => '0');
                 ghost_tick <= '0';
-                lfsr       <= x"5A";
             ELSE
                 -- slow ghost step rate; tune value for speed
                 IF ghost_cnt = TO_UNSIGNED(150000-1, ghost_cnt'LENGTH) THEN
                     ghost_cnt  <= (OTHERS => '0');
                     ghost_tick <= '1';
 
-                    -- 8-bit maximal LFSR taps (example: x^8 + x^6 + x^5 + x^4 + 1)
-                    lfsr <= lfsr(6 DOWNTO 0) & (lfsr(7) XOR lfsr(5) XOR lfsr(4) XOR lfsr(3));
                 ELSE
                     ghost_cnt  <= ghost_cnt + 1;
                     ghost_tick <= '0';
@@ -593,6 +595,101 @@ BEGIN
             END IF;
         END IF;
     END PROCESS;
+
+--    ghost_move : PROCESS(clk_in)
+--        VARIABLE new_gx : UNSIGNED(10 DOWNTO 0);
+--        VARIABLE new_gy : UNSIGNED(10 DOWNTO 0);
+--        VARIABLE blocked: STD_LOGIC;
+--        VARIABLE wall_start : cord;
+--        VARIABLE wall_end : cord;
+--        VARIABLE g_min_x, g_max_x : UNSIGNED(10 DOWNTO 0);
+--        VARIABLE g_min_y, g_max_y : UNSIGNED(10 DOWNTO 0);
+--        VARIABLE wallindex, moveindex : INTEGER;
+--    BEGIN
+--        if rising_edge(clk_in) THEN
+--            IF reset = '1' THEN
+--                ghost1_x <= STARTING_GHOST_X;
+--                ghost1_y <= STARTING_GHOST_Y;
+--                ghost_dir <= directions(moveindex);
+--            ELSIF ghost_tick = '1' THEN
+--                new_gx := ghost1_x;
+--                new_gy := ghost1_y;
+                
+--                IF ghost_dir = "00" THEN       -- UP
+--                    new_gy := ghost1_y - TO_UNSIGNED(MOVE_SPEED, ghost1_y'LENGTH);
+--                ELSIF ghost_dir = "01" THEN    -- RIGHT
+--                    new_gx := ghost1_x + TO_UNSIGNED(MOVE_SPEED, ghost1_x'LENGTH);
+--                ELSIF ghost_dir = "11" THEN    -- DOWN
+--                    new_gy := ghost1_y + TO_UNSIGNED(MOVE_SPEED, ghost1_y'LENGTH);
+--                ELSE                           -- "10" = LEFT
+--                    new_gx := ghost1_x - TO_UNSIGNED(MOVE_SPEED, ghost1_x'LENGTH);
+--                END IF;
+                
+--                blocked := '0';
+--                FOR wallindex IN walls_to_draw'RANGE LOOP
+--                    wall_start := walls_to_draw(wallindex)(0); -- (minX, maxY)
+--                    wall_end   := walls_to_draw(wallindex)(1); -- (maxX, minY)
+
+--                    IF ( g_max_x >= TO_UNSIGNED(wall_start(0), g_max_x'LENGTH) AND
+--                         g_min_x <= TO_UNSIGNED(wall_end(0),   g_min_x'LENGTH) AND
+--                         g_max_y >= TO_UNSIGNED(wall_end(1),   g_max_y'LENGTH) AND
+--                         g_min_y <= TO_UNSIGNED(wall_start(1), g_min_y'LENGTH) ) THEN
+--                            blocked := '1';
+--                        EXIT;
+--                    END IF;
+--                END LOOP;
+                
+--                IF blocked = '0' THEN
+--                    -- move in current direction
+--                    ghost1_x <= new_gx;
+--                    ghost1_y <= new_gy;
+--                ELSE
+--                    -- bounce: rotate direction (up→right→down→left→up)
+--                    moveindex := moveindex + 1;
+--                    ghost_dir <= directions(moveindex);
+--                    -- recompute candidate move in new direction from current center
+--                    new_gx := ghost1_x;
+--                    new_gy := ghost1_y;
+
+--                    IF ghost_dir = "00" THEN       -- UP
+--                        new_gy := ghost1_y - TO_UNSIGNED(MOVE_SPEED, ghost1_y'LENGTH);
+--                    ELSIF ghost_dir = "01" THEN    -- RIGHT
+--                        new_gx := ghost1_x + TO_UNSIGNED(MOVE_SPEED, ghost1_x'LENGTH);
+--                    ELSIF ghost_dir = "11" THEN    -- DOWN
+--                        new_gy := ghost1_y + TO_UNSIGNED(MOVE_SPEED, ghost1_y'LENGTH);
+--                    ELSE                           -- LEFT
+--                        new_gx := ghost1_x - TO_UNSIGNED(MOVE_SPEED, ghost1_x'LENGTH);
+--                    END IF;
+
+--                    -- ghost AABB for bounce attempt
+--                    g_min_x := new_gx - TO_UNSIGNED(ghost_size,  new_gx'LENGTH);
+--                    g_max_x := new_gx + TO_UNSIGNED(ghost_size,  new_gx'LENGTH);
+--                    g_min_y := new_gy - TO_UNSIGNED(2*ghost_size, new_gy'LENGTH);
+--                    g_max_y := new_gy + TO_UNSIGNED(2*ghost_size, new_gy'LENGTH);
+
+--                    blocked := '0';
+--                    FOR i IN walls_to_draw'RANGE LOOP
+--                        wall_start := walls_to_draw(i)(0);
+--                        wall_end   := walls_to_draw(i)(1);
+
+--                        IF ( g_max_x >= TO_UNSIGNED(wall_start(0), g_max_x'LENGTH) AND
+--                             g_min_x <= TO_UNSIGNED(wall_end(0),   g_min_x'LENGTH) AND
+--                             g_max_y >= TO_UNSIGNED(wall_end(1),   g_max_y'LENGTH) AND
+--                             g_min_y <= TO_UNSIGNED(wall_start(1), g_min_y'LENGTH) ) THEN
+--                                blocked := '1';
+--                            EXIT;
+--                        END IF;
+--                    END LOOP;
+                    
+--                    IF blocked = '0' THEN
+--                        ghost1_x <= new_gx;
+--                        ghost1_y <= new_gy;
+--                    END IF;  -- else stay put this tick
+--                END IF;
+--            END IF;
+--        END IF;
+--END PROCESS;
+                
 
     ghost_move : PROCESS(clk_in)
         VARIABLE new_gx   : UNSIGNED(10 DOWNTO 0);
@@ -602,6 +699,7 @@ BEGIN
         VARIABLE wc_end   : cord;
         VARIABLE g_min_x, g_max_x : UNSIGNED(10 DOWNTO 0);
         VARIABLE g_min_y, g_max_y : UNSIGNED(10 DOWNTO 0);
+        VARIABLE moveindex : INTEGER := 1;
     BEGIN
         -- dir encoding:
         -- "00" = up, "01" = right, "11" = down, "10" = left
@@ -609,7 +707,8 @@ BEGIN
             IF reset = '1' THEN
                 ghost1_x  <= STARTING_GHOST_X;
                 ghost1_y  <= STARTING_GHOST_Y;
-                ghost_dir <= "01";  -- start moving right
+                ghost_dir <= directions(0);  -- start moving right
+                moveindex := 1;
             ELSIF ghost_tick = '1' THEN
                 -- start from current center
                 new_gx := ghost1_x;
@@ -654,15 +753,8 @@ BEGIN
                     ghost1_y <= new_gy;
                 ELSE
                     -- bounce: rotate direction (up→right→down→left→up)
-                    IF ghost_dir = "00" THEN       -- was going up
-                        ghost_dir <= "01";         -- try right
-                    ELSIF ghost_dir = "01" THEN    -- was going right
-                        ghost_dir <= "11";         -- try down
-                    ELSIF ghost_dir = "11" THEN    -- was going down
-                        ghost_dir <= "10";         -- try left
-                    ELSE                           -- was going left ("10")
-                        ghost_dir <= "00";         -- try up
-                    END IF;
+                    ghost_dir <= directions(moveindex);
+                    moveindex := moveindex + 1;
 
                     -- recompute candidate move in new direction from current center
                     new_gx := ghost1_x;
@@ -704,6 +796,10 @@ BEGIN
                     END IF;  -- else stay put this tick
                 END IF;
             END IF;
+        END IF;
+        
+        IF moveindex = 19 THEN
+            moveindex := 0;
         END IF;
     END PROCESS;
 
