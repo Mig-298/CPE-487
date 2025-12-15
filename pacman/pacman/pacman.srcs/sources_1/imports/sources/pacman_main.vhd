@@ -22,7 +22,7 @@ END pong;
 ARCHITECTURE Behavioral OF pong IS
     SIGNAL pxl_clk : STD_LOGIC := '0'; -- 25 MHz clock to VGA sync module
     -- internal signals to connect modules
-    SIGNAL S_red, S_green, S_blue : STD_LOGIC; --_VECTOR (3 DOWNTO 0);
+    SIGNAL S_red, S_green, S_blue : STD_LOGIC; --  VECTOR (3 DOWNTO 0);
     SIGNAL S_vsync : STD_LOGIC;
     SIGNAL S_pixel_row, S_pixel_col : STD_LOGIC_VECTOR (10 DOWNTO 0);
     SIGNAL batpos : STD_LOGIC_VECTOR (10 DOWNTO 0); -- 9 downto 0
@@ -70,12 +70,12 @@ ARCHITECTURE Behavioral OF pong IS
             seg : OUT STD_LOGIC_VECTOR (6 DOWNTO 0)
         );
     END COMPONENT; 
-    
 BEGIN
     pos : PROCESS (clk_in) is
     BEGIN
         if rising_edge(clk_in) then
             count <= count + 1;
+<<<<<<< Updated upstream
             IF (btnl = '1' and count = 0 and batpos > 0) THEN
                 batpos <= batpos - 10;
             ELSIF (btnr = '1' and count = 0 and batpos < 800) THEN
@@ -86,6 +86,16 @@ BEGIN
     led_mpx <= count(19 DOWNTO 17); -- 7-seg multiplexing clock    
     add_bb : bat_n_ball
     PORT MAP(--instantiate bat and ball component
+=======
+        end if;
+    END PROCESS;
+    red_bus <= S_red & "000";
+    green_bus <= S_green & "000";
+    blue_bus <= S_blue & "000";
+    led_mpx <= count(19 DOWNTO 17); 
+    pacman1 : pacman
+    PORT MAP(
+>>>>>>> Stashed changes
         v_sync => S_vsync, 
         pixel_row => S_pixel_row, 
         pixel_col => S_pixel_col, 

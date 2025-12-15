@@ -13,10 +13,16 @@ ARCHITECTURE Behavioral OF leddec16 IS
 	SIGNAL data4 : STD_LOGIC_VECTOR (3 DOWNTO 0); -- binary value of current digit
 BEGIN
 	-- Select digit data to be displayed in this mpx period
-	data4 <= data(3 DOWNTO 0) WHEN dig = "000" ELSE -- digit 0
-	         data(7 DOWNTO 4) WHEN dig = "001" ELSE -- digit 1
-	         data(11 DOWNTO 8) WHEN dig = "010" ELSE -- digit 2
-	         data(15 DOWNTO 12); -- digit 3
+	data4 <= data(3 DOWNTO 0) WHEN dig = "000" ELSE   -- digit 0
+         	 data(7 DOWNTO 4) WHEN dig = "001" ELSE   -- digit 1  
+         	 data(11 DOWNTO 8) WHEN dig = "010" ELSE  -- digit 2
+         	 data(15 DOWNTO 12);
+         	 --data(15 DOWNTO 12) WHEN dig = "011" ELSE -- digit 3
+         	 --data(19 DOWNTO 16) WHEN dig = "100" ELSE -- digit 4
+         	 --data(23 DOWNTO 20) WHEN dig = "101" ELSE -- digit 5
+         	 --data(27 DOWNTO 24) WHEN dig = "110" ELSE -- digit 6
+         	 --data(31 DOWNTO 28);                      -- digit 7
+
 	-- Turn on segments corresponding to 4-bit data word
 	seg <= "0000001" WHEN data4 = "0000" ELSE -- 0
 	       "1001111" WHEN data4 = "0001" ELSE -- 1
@@ -40,9 +46,9 @@ BEGIN
 	         "11111101" WHEN dig = "001" ELSE -- 1
 	         "11111011" WHEN dig = "010" ELSE -- 2
 	         "11110111" WHEN dig = "011" ELSE -- 3
---	         "11101111" WHEN dig = "100" ELSE -- 4
---	         "11011111" WHEN dig = "101" ELSE -- 5 
---	         "10111111" WHEN dig = "110" ELSE -- 6
---	         "01111111" WHEN dig = "111" ELSE -- 7
+	         "11101111" WHEN dig = "100" ELSE -- 4
+	         "11011111" WHEN dig = "101" ELSE -- 5 
+	         "10111111" WHEN dig = "110" ELSE -- 6
+	         "01111111" WHEN dig = "111" ELSE -- 7
 	         "11111111";
 END Behavioral;
