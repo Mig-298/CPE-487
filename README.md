@@ -71,6 +71,8 @@ Pacman_main has subcomponents clk_wiz_0, vga_sync, leddec16, and pacman. Only pa
 
 ## Inputs to and from the Nexus Board
 <img width="607" height="1065" alt="image" src="https://github.com/user-attachments/assets/c3750e8f-44c4-40b1-9795-d20a22e4d386" />
+VGA-hsync controls horizontal timing and VGA_vsync controls vertical timing.
+SEG7anode selects which digit to display
 
 ### Pacman
 This component handles all of the game mechanics. This is done through many subprocesses, which will be described below. 
