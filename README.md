@@ -81,39 +81,49 @@ Chooses which color to display at pixel_row, pixel_col
 This depends on whether pacman is alive, if a coordinate is in a wall, if a coordinate is in the ghost, if a coordinate is in pacman, island if the coordinate is in a food particle.
 
 _pacdraw_
+
 Draws the pacman on screen using pac_x, pac_y, pixel_row, pixel_col. 
 This process compares pixel_row and pixel_col against pac_x and pac_y to determine if the current pixel lies within Pacman’s bounding region, asserting pac_on when the condition is met.
 
 _die_
+
 Actual function that makes the player "die" to the ghost.
 Handles player death logic when Pacman comes into contact with the ghost.
 This process detects overlap between Pacman and ghost coordinate ranges and updates the alive state, disabling Pacman movement and rendering until a reset occurs.
 
 _eatfood_
+
 Function to eat food and reset the food on the screen using the middle button (BTNC). 
 When pac_on and food_on overlap, the process increments curr_score, marks the food as eaten in food_list, and prevents re-scoring using the not_eaten flag. The middle button (BTNC) resets the food list and score when pressed.
 
 _movehelper_
+
 Clock management to prevent pacman from not moving smoothly. Without this function, pacman essential teleports aroudn the screen due to the pixels not updating fast enough. Uses clk_in to manage.
 
 _move_pac_
+
 Movement script for player movement. Use 4 buttons, BTNU = UP, BTNR = RIGHT, BTND = DOWN, BTNL = LEFT. Deals with potential collisions against walls or ghost.
 
 _walldraw_
+
 Essential function to create the walls around the map. Given the array list, it is able to draw between two start and end points to draw the walls and flagging wall_on when the current pixel falls within a wall region.
 
 _fooddraw_
+
 Essential function to draw the food around a certain coordinate.
 This process checks pixel_row and pixel_col against stored food positions and enables food_on only for food items that have not yet been marked as eaten.
 
 _ghostdraw_
+
 Essential to draw the ghost itself on the screen.
 Similar to Pacman drawing logic, this process asserts ghost_on when the current pixel lies within the ghost’s positional boundaries defined by its x and y coordinates.
 
 _ghosttimer_
+
 Function to make sure that the ghost is also not teleporting around the screen by creating a timer in which it updates. By using an internal timer or clock divider, this process limits how frequently the ghost’s position is updated, ensuring smooth and visually consistent motion.
 
 _ghost_move_
+
 Essential ghost move function, update the directiors list at the top to make the ghost move around the maze however you want. This process updates the ghost’s direction based on a predefined direction list and wall collision checks, allowing the ghost to navigate the maze without user input.
 
 ## Modifications
