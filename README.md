@@ -1,6 +1,6 @@
-CPE-487
-CPE-487 Final Project
-Nicole Young, Miguel Rodriguez, Matthew Kemenosh
+# CPE-487 Final Project - Pacman
+
+-Nicole Young, Miguel Rodriguez, Matthew Kemenosh
 
 ## Expected Behavior 
 
