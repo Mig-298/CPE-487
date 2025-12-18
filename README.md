@@ -80,7 +80,40 @@ Chooses which color to display at pixel_row, pixel_col
 This depends on whether pacman is alive, if a coordinate is in a wall, if a coordinate is in the ghost, if a coordinate is in pacman, island if the coordinate is in a food particle.
 
 _pacdraw_
+Draws the pacman on screen using pac_x, pac_y, pixel_row, pixel_col. 
+This process compares pixel_row and pixel_col against pac_x and pac_y to determine if the current pixel lies within Pacman’s bounding region, asserting pac_on when the condition is met.
 
+_die_
+Actual function that makes the player "die" to the ghost.
+Handles player death logic when Pacman comes into contact with the ghost.
+This process detects overlap between Pacman and ghost coordinate ranges and updates the alive state, disabling Pacman movement and rendering until a reset occurs.
+
+_eatfood_
+Function to eat food and reset the food on the screen using the middle button (BTNC). 
+When pac_on and food_on overlap, the process increments curr_score, marks the food as eaten in food_list, and prevents re-scoring using the not_eaten flag. The middle button (BTNC) resets the food list and score when pressed.
+
+_movehelper_
+Clock management to prevent pacman from not moving smoothly. Without this function, pacman essential teleports aroudn the screen due to the pixels not updating fast enough. Uses clk_in to manage.
+
+_move_pac_
+Movement script for player movement. Use 4 buttons, BTNU = UP, BTNR = RIGHT, BTND = DOWN, BTNL = LEFT. Deals with potential collisions against walls or ghost.
+
+_walldraw_
+Essential function to create the walls around the map. Given the array list, it is able to draw between two start and end points to draw the walls and flagging wall_on when the current pixel falls within a wall region.
+
+_fooddraw_
+Essential function to draw the food around a certain coordinate.
+This process checks pixel_row and pixel_col against stored food positions and enables food_on only for food items that have not yet been marked as eaten.
+
+_ghostdraw_
+Essential to draw the ghost itself on the screen.
+Similar to Pacman drawing logic, this process asserts ghost_on when the current pixel lies within the ghost’s positional boundaries defined by its x and y coordinates.
+
+_ghosttimer_
+Function to make sure that the ghost is also not teleporting around the screen by creating a timer in which it updates. By using an internal timer or clock divider, this process limits how frequently the ghost’s position is updated, ensuring smooth and visually consistent motion.
+
+_ghost_move_
+Essential ghost move function, update the directiors list at the top to make the ghost move around the maze however you want. This process updates the ghost’s direction based on a predefined direction list and wall collision checks, allowing the ghost to navigate the maze without user input.
 
 ## Modifications
 This project builds directly upon Lab 6, the Pong Lab, which served as the conceptual and structural baseline for our VGA graphics, timing, and basic object movement. bat_n_ball.vhd and pong.vhd were the main modules we modified and improved upon, converting to the modules pacman.vhd and pacman_main.vhd respectively. The supporting modules such as clk_wiz_0.vhd, vga_sync.vhd, and leddec16.vhd were reused with minimal to no functional changes. Our main work focused on significantly extending and transforming the original Pong gameplay into a fully interactive Pacman style game.
@@ -97,7 +130,7 @@ Key modifications include:
 - Game State and Scoring Enhancements: The hit counter from Pong was repurposed into a Pacman score system, integrated when a food pellet is “eaten”, with the updating signal routing score displayed on the seven segment display. We also updated the scoring method from counting in hexadecimal since it would mess up the true score tracking (like going from 10, to 1A, to 1F, then 20 etc.), and were able to properly count up by 1 through the leddec16.vhd module. This represents a functional expansion beyond simple hit counting. A dedicated reset input was also added to allow instant restarting of the game anytime.
 
 ## Conclusion
-Throughout the project, we organized the components that were essential for the game. These were divided up into three different “categories”, walls, movement and fruits. These were the core components that basically made pacman to be pacman. The walls were handled by Matt Kemenosh, movement by Miguel Rodriguez/Nicole Young and the eating/fruits by Miguel Rodriguez/Nicole Young. Miguel and Nicole handled many of the coding/bug fixing while Matt would handle code testing and researching/suggesting fixes. By dividing up the work, we were able to attempt to structure our timeline to develop all the components by certain points. Below is the outline of the project with date estimates:
+Throughout the project, we organized the components that were essential for the game. These were divided up into three different “categories”, walls, movement and fruits. These were the core components that basically made pacman to be pacman. The walls were handled by Matt Kemenosh, movement by Miguel Rodriguez/Nicole Young and the eating/fruits by Miguel Rodriguez/Nicole Young. Miguel and Nicole handled many of the coding/bug fixing while Matt would handle code testing and researching/suggesting fixes. For the GitHub write up, Nicole helped write the beginning, Matt wrote most of the details from mid-beginning to end, and Miguel helped write the ending. By dividing up the work, we were able to attempt to structure our timeline to develop all the components by certain points. Below is the outline of the project with date estimates:
 
 _Week of November 25th:_ Begin outline of the project itself with the goals we want to achieve. Research basic functions that were necessary for the creation of our game.
 
