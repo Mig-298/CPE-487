@@ -61,6 +61,7 @@ VGA connector.
 1. Connect the Nexus Board to the computer via the Micro-USB to
 
 ## Architectural Overview
+![PNG image](https://github.com/user-attachments/assets/25f8a908-01b9-477d-8362-45b40939ab10)
 
 The highest level architecture is pacman_main. Our code was based on the pong lab, so the architecture of pacman_main resembles that.
 
